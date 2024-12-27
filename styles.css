@@ -45,7 +45,7 @@ button {
 
 #websiteList li {
     display: flex;
-    justify-content: between; /* 确保文本和按钮对齐 */
+    justify-content: space-between; /* 确保文本和按钮对齐 */
     align-items: center; /* 垂直居中对齐 */
 }
 
