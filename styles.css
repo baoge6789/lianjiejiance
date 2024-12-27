@@ -2,10 +2,13 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f9f9e5; /* 浅黄色背景 */
     color: #333;
+    margin: 0; /* 移除默认边距 */
+    padding: 0; /* 移除默认内边距 */
 }
 
 .container {
-    max-width: 600px;
+    max-width: 90%; /* 容器最大宽度为90% */
+    width: 600px; /* 最大宽度为600px */
     margin: auto;
     padding: 20px;
     background: white;
@@ -19,10 +22,11 @@ h1 {
 
 form {
     display: flex;
+    flex-wrap: wrap; /* 允许换行以适应小屏幕 */
 }
 
 input {
-    flex: 1;
+    flex: 1 1 auto; /* 自适应宽度 */
     margin-right: 10px;
     padding: 10px;
 }
@@ -70,4 +74,29 @@ button.modify {
 
 button.default {
     background-color: green; /* 默认按钮为绿色 */
+}
+
+/* 媒体查询：针对小屏幕（如手机）进行样式调整 */
+@media (max-width: 600px) {
+    .container {
+        width: 95%; /* 在小屏幕上容器宽度为95% */
+        padding: 10px; /* 减少内边距 */
+    }
+
+    form {
+        flex-direction: column; /* 垂直排列输入框和按钮 */
+        align-items: stretch; /* 按钮和输入框占满整个宽度 */
+    }
+
+    input {
+        margin-right: 0; /* 移除右边距以适应垂直排列 */
+        margin-bottom: 10px; /* 添加底部间距以分隔输入框和按钮 */
+        width: auto; /* 自适应宽度 */
+    }
+
+    button {
+        width: 100%; /* 按钮占满整个宽度 */
+        margin-left: 0; /* 移除左边距以适应全宽 */
+        margin-bottom: 5px; /* 添加底部间距以分隔按钮 */
+    }
 }
