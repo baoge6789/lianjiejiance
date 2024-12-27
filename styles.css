@@ -48,9 +48,9 @@ button {
     display: flex; /* 使用 Flexbox 布局 */
     justify-content: space-between; /* 确保文本和按钮对齐 */
     align-items: center; /* 垂直居中对齐 */
-    margin-bottom: 10px; /* 列表项之间的间距 */
 }
 
+/* 按钮样式 */
 #websiteList button {
     margin-left: 10px; /* 按钮之间的间距 */
 }
