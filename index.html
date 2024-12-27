@@ -1,102 +1,69 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9e5; /* 浅黄色背景 */
-    color: #333;
-    margin: 0; /* 移除默认边距 */
-    padding: 0; /* 移除默认内边距 */
-}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网址监测器</title>
+</head>
+<body>
+    <div class="container">
+        <h1>网址监测器</h1>
+        <form id="monitorForm">
+            <input type="text" id="url" placeholder="输入网址 (例如 https://example.com)" required>
+            <input type="text" id="name" placeholder="输入网站名称" required>
+            <button type="submit">添加监测</button>
+        </form>
+        <button id="exportList">导出监测列表</button>
+        <ul id="websiteList"></ul>
+    </div>
 
-.container {
-    max-width: 90%; /* 容器最大宽度为90% */
-    width: 600px; /* 最大宽度为600px */
-    margin: auto;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
+    <script>
+        document.getElementById('monitorForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const url = document.getElementById('url').value;
+            const name = document.getElementById('name').value;
+            addWebsite(url, name);
+            displayWebsites();
+            document.getElementById('url').value = '';
+            document.getElementById('name').value = '';
+        });
 
-h1 {
-    text-align: center;
-}
+        function addWebsite(url, name) {
+            const website = { url, name };
+            let websites = JSON.parse(localStorage.getItem('monitoredWebsites')) || [];
+            websites.push(website);
+            localStorage.setItem('monitoredWebsites', JSON.stringify(websites));
+        }
 
-form {
-    display: flex;
-    flex-wrap: wrap; /* 允许换行以适应小屏幕 */
-}
+        function displayWebsites() {
+            const websites = JSON.parse(localStorage.getItem('monitoredWebsites')) || [];
+            const websiteList = document.getElementById('websiteList');
+            websiteList.innerHTML = '';
+            websites.forEach(website => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${website.name}: ${website.url}`;
+                websiteList.appendChild(listItem);
+            });
+        }
 
-input {
-    flex: 1 1 auto; /* 自适应宽度 */
-    margin-right: 10px;
-    padding: 10px;
-}
+        document.getElementById('exportList').addEventListener('click', function() {
+            const websites = localStorage.getItem('monitoredWebsites');
+            if (!websites) {
+                alert("没有监测的网站可导出。");
+                return;
+            }
+            const blob = new Blob([websites], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'monitored_websites.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
 
-button {
-    padding: 10px 15px;
-}
-
-#results {
-    margin-top: 20px;
-}
-
-.status-normal {
-    color: green; /* 正常状态显示为绿色 */
-}
-
-.status-error {
-    color: red; /* 错误状态显示为红色 */
-}
-
-#websiteList {
-    list-style-type: none; /* 移除列表样式 */
-    padding: 0; /* 移除内边距 */
-}
-
-#websiteList li {
-    display: flex;
-    justify-content: space-between; /* 确保文本和按钮对齐 */
-    align-items: center; /* 垂直居中对齐 */
-    margin-bottom: 10px; /* 每个条目之间的间距 */
-}
-
-#websiteList button {
-    margin-left: 10px; /* 按钮之间的间距 */
-}
-
-button.delete {
-    background-color: red; /* 删除按钮为红色 */
-    color: white;
-}
-
-button.modify {
-    background-color: yellow; /* 修改按钮为黄色 */
-}
-
-button.default {
-    background-color: green; /* 默认按钮为绿色 */
-}
-
-/* 媒体查询：针对小屏幕（如手机）进行样式调整 */
-@media (max-width: 600px) {
-    .container {
-        width: 95%; /* 在小屏幕上容器宽度为95% */
-        padding: 10px; /* 减少内边距 */
-    }
-
-    form {
-        flex-direction: column; /* 垂直排列输入框和按钮 */
-        align-items: stretch; /* 按钮和输入框占满整个宽度 */
-    }
-
-    input {
-        margin-right: 0; /* 移除右边距以适应垂直排列 */
-        margin-bottom: 10px; /* 添加底部间距以分隔输入框和按钮 */
-        width: auto; /* 自适应宽度 */
-    }
-
-    button {
-        width: 100%; /* 按钮占满整个宽度 */
-        margin-left: 0; /* 移除左边距以适应全宽 */
-        margin-bottom: 5px; /* 添加底部间距以分隔按钮 */
-    }
-}
+        // 页面加载时显示已保存的网站
+        window.onload = displayWebsites;
+    </script>
+</body>
+</html>
