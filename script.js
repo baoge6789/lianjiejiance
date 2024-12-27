@@ -94,16 +94,15 @@ function displayResult(name, resultText) {
     
    const resultElement = document.createElement('div');
     
-   if (resultText.includes("正在运行")) { 
-       resultText = `网站 ${name} 正常运行，状态码: ok`; // 修改结果文本格式 
-       resultElement.className = 'status-normal'; // 正常状态显示为绿色 
+   resultElement.innerText = resultText; // 显示结果文本 
+   
+   if (resultText.includes("正常运行")) { 
+       resultElement.className = 'status-normal'; 
    } else { 
-       resultElement.className = 'status-error'; // 错误状态 
-       resultElement.innerText = resultText; // 显示错误信息 
+       resultElement.className = 'status-error'; 
    }
 
-   resultElement.innerText += ` (${resultText})`; 
-   resultsDiv.appendChild(resultElement); // 将结果添加到显示区域 
+   resultsDiv.appendChild(resultElement); 
 }
 
 // 页面加载时显示已保存的网站列表
