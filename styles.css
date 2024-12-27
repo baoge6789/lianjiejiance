@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #f9f9e5; /* 浅黄色背景 */
     color: #333;
 }
 
@@ -19,7 +19,6 @@ h1 {
 
 form {
     display: flex;
-    justify-content: space-between;
 }
 
 input {
@@ -37,9 +36,27 @@ button {
 }
 
 .status-normal {
-    color: green;
+    color: green; /* 正常状态显示为绿色 */
 }
 
 .status-error {
-    color: red;
+    color: red; /* 错误状态显示为红色 */
+}
+
+#websiteList li {
+    display: flex;
+    justify-content: space-between; /* 确保按钮和文本对齐 */
+}
+
+button.delete {
+    background-color: red; /* 删除按钮为红色 */
+    color: white;
+}
+
+button.modify {
+    background-color: yellow; /* 修改按钮为黄色 */
+}
+
+button.default {
+    background-color: green; /* 默认按钮为绿色 */
 }
