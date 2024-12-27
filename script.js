@@ -108,4 +108,53 @@ function displayResult(name, resultText) {
 // 页面加载时显示已保存的网站列表
 window.onload = function() {
    displayWebsiteList();
-};
+};// 初始化一个数组来存储监测的网站
+let monitoredWebsites = [];
+
+// 处理表单提交
+document.getElementById('monitorForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // 防止表单默认提交
+
+    // 获取用户输入的网址和名称
+    const url = document.getElementById('url').value;
+    const name = document.getElementById('name').value;
+
+    // 将新网站添加到数组中
+    monitoredWebsites.push({ url, name });
+
+    // 更新显示的网站列表
+    updateWebsiteList();
+
+    // 清空输入框
+    document.getElementById('url').value = '';
+    document.getElementById('name').value = '';
+});
+
+// 更新网站列表的函数
+function updateWebsiteList() {
+    const websiteList = document.getElementById('websiteList');
+    websiteList.innerHTML = ''; // 清空现有列表
+
+    monitoredWebsites.forEach((website, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${website.name}: ${website.url}`;
+        websiteList.appendChild(listItem);
+    });
+}
+
+// 导出监测列表的函数
+document.getElementById('exportList').addEventListener('click', function() {
+    const dataStr = JSON.stringify(monitoredWebsites, null, 2); // 将数据转换为 JSON 字符串
+    const blob = new Blob([dataStr], { type: 'application/json' }); // 创建 Blob 对象
+    const url = URL.createObjectURL(blob); // 创建下载链接
+
+    // 创建一个临时链接并触发下载
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'monitored_websites.json'; // 设置下载文件名
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+});
+
+
