@@ -35,6 +35,7 @@ function displayWebsiteList() {
     
    websites.forEach((website, index) => {
        const listItem = document.createElement('li');
+       listItem.setAttribute('draggable', 'true'); // 设置可拖拽属性
         
        // 创建链接并添加鼠标悬停效果
        const link = document.createElement('span');
@@ -63,7 +64,43 @@ function displayWebsiteList() {
        listItem.appendChild(deleteButton);
         
        websiteList.appendChild(listItem);
+
+       // 添加拖拽事件监听器
+       listItem.addEventListener('dragstart', handleDragStart);
+       listItem.addEventListener('dragover', handleDragOver);
+       listItem.addEventListener('drop', handleDrop);
    });
+}
+
+// 拖拽相关功能
+let draggedItem;
+
+function handleDragStart(e) {
+   draggedItem = this; // 保存被拖拽的元素
+   e.dataTransfer.effectAllowed = 'move'; // 拖动效果为移动
+   setTimeout(() => this.style.display = 'none', 0); // 拖拽开始时隐藏元素
+}
+
+function handleDragOver(e) {
+   e.preventDefault(); // 阻止默认行为以允许放置元素
+}
+
+function handleDrop(e) {
+   e.stopPropagation(); // 防止事件冒泡
+
+   if (draggedItem !== this) { // 确保不是放置到自身上
+       const allItems = [...document.querySelectorAll('#websiteList li')];
+       const draggedIndex = allItems.indexOf(draggedItem);
+       const targetIndex = allItems.indexOf(this);
+
+       if (draggedIndex > targetIndex) { 
+           this.parentNode.insertBefore(draggedItem, this); 
+       } else { 
+           this.parentNode.insertBefore(draggedItem, this.nextSibling); 
+       }
+   }
+
+   return false; 
 }
 
 // 删除网站
@@ -95,7 +132,7 @@ function displayResult(name, resultText) {
    const resultElement = document.createElement('div');
     
    if (resultText.includes("正在运行")) { 
-       resultText = `网站 ${name} 正常运行，状态码: 200`; // 修改结果文本格式 
+       resultText = `网站 ${name} 正常运行，状态码: 200`; 
        resultElement.className = 'status-normal'; 
    } else { 
        resultElement.className = 'status-error'; 
