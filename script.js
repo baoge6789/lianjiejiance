@@ -33,11 +33,51 @@ function displayWebsiteList() {
 
     const websites = JSON.parse(localStorage.getItem('websites')) || [];
     
-    websites.forEach(website => {
+    websites.forEach((website, index) => {
         const listItem = document.createElement('li');
         listItem.textContent = `${website.name} (${website.url})`;
+        
+        // 添加删除按钮
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = '删除';
+        deleteButton.onclick = () => {
+            deleteWebsite(index);
+        };
+        
+        // 添加修改按钮
+        const editButton = document.createElement('button');
+        editButton.textContent = '修改';
+        editButton.onclick = () => {
+            modifyWebsite(index);
+        };
+
+        listItem.appendChild(editButton);
+        listItem.appendChild(deleteButton);
+        
         websiteList.appendChild(listItem);
     });
+}
+
+// 删除网站
+function deleteWebsite(index) {
+    let websites = JSON.parse(localStorage.getItem('websites')) || [];
+    websites.splice(index, 1); // 删除指定索引的网站
+    localStorage.setItem('websites', JSON.stringify(websites)); // 更新本地存储
+    displayWebsiteList(); // 更新显示列表
+}
+
+// 修改网站
+function modifyWebsite(index) {
+    let websites = JSON.parse(localStorage.getItem('websites')) || [];
+    
+    const newUrl = prompt("请输入新的网址", websites[index].url);
+    const newName = prompt("请输入新的网站名称", websites[index].name);
+    
+    if (newUrl && newName) {
+        websites[index] = { url: newUrl, name: newName }; // 更新指定索引的网站信息
+        localStorage.setItem('websites', JSON.stringify(websites)); // 更新本地存储
+        displayWebsiteList(); // 更新显示列表
+    }
 }
 
 // 显示检测结果
