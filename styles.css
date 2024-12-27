@@ -43,14 +43,12 @@ button {
     color: red; /* 错误状态显示为红色 */
 }
 
-/* 列表项样式 */
 #websiteList li {
-    display: flex; /* 使用 Flexbox 布局 */
+    display: flex;
     justify-content: space-between; /* 确保文本和按钮对齐 */
     align-items: center; /* 垂直居中对齐 */
 }
 
-/* 按钮样式 */
 #websiteList button {
     margin-left: 10px; /* 按钮之间的间距 */
 }
