@@ -45,7 +45,12 @@ button {
 
 #websiteList li {
     display: flex;
-    justify-content: space-between; /* 确保按钮和文本对齐 */
+    justify-content: space-between; /* 确保文本和按钮对齐 */
+    align-items: center; /* 垂直居中对齐 */
+}
+
+#websiteList button {
+    margin-left: 10px; /* 按钮之间的间距 */
 }
 
 button.delete {
@@ -59,9 +64,4 @@ button.modify {
 
 button.default {
     background-color: green; /* 默认按钮为绿色 */
-}
-
-/* 确保按钮竖直方向上对齐 */
-#websiteList button {
-    margin-left: 10px; /* 按钮之间的间距 */
 }
