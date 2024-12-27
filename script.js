@@ -1,111 +1,86 @@
-document.getElementById('monitorForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // 阻止默认提交行为
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网站列表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9e5; /* 浅黄色背景 */
+            color: #333;
+        }
 
-    const url = document.getElementById('url').value; // 获取输入的网址
-    const name = document.getElementById('name').value; // 获取输入的网站名称
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-    // 将新网站添加到本地存储
-    addWebsiteToList(url, name);
-    displayWebsiteList();
-});
+        h1 {
+            text-align: center;
+        }
 
-document.getElementById('startMonitoring').addEventListener('click', async function() {
-    const websites = JSON.parse(localStorage.getItem('websites')) || [];
+        #websiteList {
+            list-style-type: none; /* 移除列表样式 */
+            padding: 0; /* 移除内边距 */
+        }
+
+        #websiteList li {
+            display: flex;
+            justify-content: space-between; /* 确保文本和按钮对齐 */
+            align-items: center; /* 垂直居中对齐 */
+            margin-bottom: 10px; /* 每个条目之间的间距 */
+        }
+
+        button.delete {
+            background-color: red; /* 删除按钮为红色 */
+            color: white;
+            margin-left: 10px; /* 按钮之间的间距 */
+        }
+
+        button.modify {
+            background-color: yellow; /* 修改按钮为黄色 */
+            margin-left: 10px; /* 按钮之间的间距 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>网站列表</h1>
+    <ul id="websiteList">
+        <li>
+            <span class="website-name" onclick="toggleEdit('row0')">网站名称</span>
+            <button class="delete" onclick="dele('row0')">删除</button>
+            <button class="modify" id="modify-row0" style="display:none;" onclick="editL('row0')">修改</button>
+        </li>
+    </ul>
+</div>
+
+<script>
+function toggleEdit(rowId) {
+    var modifyButton = document.getElementById('modify-' + rowId);
     
-    for (const website of websites) {
-        const response = await fetch(`https://jiance.wangsir666998.workers.dev/?target=${encodeURIComponent(website.url)},${encodeURIComponent(website.name)}`);
-        const resultText = await response.text();
-        displayResult(website.name, resultText); // 显示结果时使用网站名称
+    // 切换修改按钮的显示状态
+    if (modifyButton.style.display === "none") {
+        modifyButton.style.display = "inline-block"; // 显示修改按钮
+    } else {
+        modifyButton.style.display = "none"; // 隐藏修改按钮
     }
-});
-
-// 添加新网站到本地存储
-function addWebsiteToList(url, name) {
-    let websites = JSON.parse(localStorage.getItem('websites')) || [];
-    websites.push({ url, name });
-    localStorage.setItem('websites', JSON.stringify(websites));
 }
 
-// 显示当前监测的网站列表
-function displayWebsiteList() {
-    const websiteList = document.getElementById('websiteList');
-    websiteList.innerHTML = ''; // 清空列表
-
-    const websites = JSON.parse(localStorage.getItem('websites')) || [];
-    
-    websites.forEach((website, index) => {
-        const listItem = document.createElement('li');
-        
-        // 创建链接并添加鼠标悬停效果
-        const link = document.createElement('span');
-        link.textContent = website.name; // 显示网站名称
-        link.title = website.url; // 鼠标悬停时显示网址
-        listItem.appendChild(link);
-
-        // 创建修改按钮
-        const editButton = document.createElement('button');
-        editButton.textContent = '修改';
-        editButton.className = 'modify';
-        editButton.onclick = () => {
-            modifyWebsite(index);
-        };
-
-        // 创建删除按钮
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = '删除';
-        deleteButton.className = 'delete';
-        deleteButton.onclick = () => {
-            deleteWebsite(index);
-        };
-
-        // 将按钮添加到列表项中
-        listItem.appendChild(editButton);
-        listItem.appendChild(deleteButton);
-        
-        websiteList.appendChild(listItem);
-    });
+function dele(rowId) {
+    // 删除逻辑
 }
 
-// 删除网站
-function deleteWebsite(index) {
-    let websites = JSON.parse(localStorage.getItem('websites')) || [];
-    websites.splice(index, 1); // 删除指定索引的网站
-    localStorage.setItem('websites', JSON.stringify(websites)); // 更新本地存储
-    displayWebsiteList(); // 更新显示列表
+function editL(rowId) {
+    // 修改逻辑
 }
+</script>
 
-// 修改网站
-function modifyWebsite(index) {
-   let websites = JSON.parse(localStorage.getItem('websites')) || [];
-    
-   const newUrl = prompt("请输入新的网址", websites[index].url);
-   const newName = prompt("请输入新的网站名称", websites[index].name);
-    
-   if (newUrl && newName) {
-       websites[index] = { url: newUrl, name: newName }; // 更新指定索引的网站信息
-       localStorage.setItem('websites', JSON.stringify(websites)); // 更新本地存储
-       displayWebsiteList(); // 更新显示列表
-   }
-}
-
-// 显示检测结果
-function displayResult(name, resultText) {
-   const resultsDiv = document.getElementById('results');
-    
-   const resultElement = document.createElement('div');
-    
-   resultElement.innerText = resultText; // 显示结果文本 
-   
-   if (resultText.includes("正常运行")) { 
-       resultElement.className = 'status-normal'; 
-   } else { 
-       resultElement.className = 'status-error'; 
-   }
-
-   resultsDiv.appendChild(resultElement); 
-}
-
-// 页面加载时显示已保存的网站列表
-window.onload = function() {
-   displayWebsiteList();
-};
+</body>
+</html>
