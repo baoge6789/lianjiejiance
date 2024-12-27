@@ -13,7 +13,7 @@ document.getElementById('startMonitoring').addEventListener('click', async funct
     const websites = JSON.parse(localStorage.getItem('websites')) || [];
     
     for (const website of websites) {
-        const response = await fetch(`https://jiance.wangsir666998.workers.dev/?target=${encodeURIComponent(website.url)},${encodeURIComponent(website.name)}`);
+        const response = await fetch(`https://jiance.baoge.us.kg/?target=${encodeURIComponent(website.url)},${encodeURIComponent(website.name)}`);
         const resultText = await response.text();
         displayResult(website.name, resultText); // 显示结果时使用网站名称
     }
