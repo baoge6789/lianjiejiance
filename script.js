@@ -4,7 +4,8 @@ document.getElementById('monitorForm').addEventListener('submit', async function
     const url = document.getElementById('url').value;
     const name = document.getElementById('name').value;
 
-    const response = await fetch(`https://jiance.wangsir666998.workers.dev?target=${encodeURIComponent(url)},${encodeURIComponent(name)}`);
+    // 使用您的 Worker URL
+    const response = await fetch(`https://jiance.wangsir666998.workers.dev/?target=${encodeURIComponent(url)},${encodeURIComponent(name)}`);
     
     const resultText = await response.text();
     
