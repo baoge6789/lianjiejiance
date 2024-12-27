@@ -36,21 +36,22 @@ function displayWebsiteList() {
     websites.forEach((website, index) => {
         const listItem = document.createElement('li');
         listItem.textContent = `${website.name} (${website.url})`;
-        
-        // 添加删除按钮
+
+        // 创建删除按钮
         const deleteButton = document.createElement('button');
         deleteButton.textContent = '删除';
         deleteButton.onclick = () => {
             deleteWebsite(index);
         };
-        
-        // 添加修改按钮
+
+        // 创建修改按钮
         const editButton = document.createElement('button');
         editButton.textContent = '修改';
         editButton.onclick = () => {
             modifyWebsite(index);
         };
 
+        // 将按钮添加到列表项中
         listItem.appendChild(editButton);
         listItem.appendChild(deleteButton);
         
@@ -86,7 +87,7 @@ function displayResult(resultText) {
     
     const resultElement = document.createElement('div');
     
-    if (resultText.includes("正在运行")) {
+    if (resultText.includes("正常运行")) {
         resultElement.className = 'status-normal'; // 正常状态
         resultElement.innerText = resultText; // 显示正常状态信息
     } else {
