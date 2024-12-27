@@ -15,7 +15,7 @@ document.getElementById('startMonitoring').addEventListener('click', async funct
     for (const website of websites) {
         const response = await fetch(`https://jiance.wangsir666998.workers.dev/?target=${encodeURIComponent(website.url)},${encodeURIComponent(website.name)}`);
         const resultText = await response.text();
-        displayResult(resultText);
+        displayResult(website.name, resultText); // 显示结果时使用网站名称
     }
 });
 
@@ -35,11 +35,17 @@ function displayWebsiteList() {
     
     websites.forEach((website, index) => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${website.name} (${website.url})`;
+        
+        // 创建链接并添加鼠标悬停效果
+        const link = document.createElement('span');
+        link.textContent = website.name; // 显示网站名称
+        link.title = website.url; // 鼠标悬停时显示网址
+        listItem.appendChild(link);
 
         // 创建删除按钮
         const deleteButton = document.createElement('button');
         deleteButton.textContent = '删除';
+        deleteButton.className = 'delete';
         deleteButton.onclick = () => {
             deleteWebsite(index);
         };
@@ -47,11 +53,11 @@ function displayWebsiteList() {
         // 创建修改按钮
         const editButton = document.createElement('button');
         editButton.textContent = '修改';
+        editButton.className = 'modify';
         editButton.onclick = () => {
             modifyWebsite(index);
         };
 
-        // 将按钮添加到列表项中
         listItem.appendChild(editButton);
         listItem.appendChild(deleteButton);
         
@@ -82,23 +88,24 @@ function modifyWebsite(index) {
 }
 
 // 显示检测结果
-function displayResult(resultText) {
+function displayResult(name, resultText) {
     const resultsDiv = document.getElementById('results');
     
     const resultElement = document.createElement('div');
     
-    if (resultText.includes("正常运行")) {
-        resultElement.className = 'status-normal'; // 正常状态
-        resultElement.innerText = resultText; // 显示正常状态信息
-    } else {
-        resultElement.className = 'status-error'; // 错误状态
-        resultElement.innerText = resultText; // 显示错误信息
-    }
+   if (resultText.includes("正在运行")) { 
+       resultText = `网站 ${name} 正常运行，状态码: ok`; // 修改结果文本格式 
+       resultElement.className = 'status-normal'; // 正常状态显示为绿色 
+   } else { 
+       resultElement.className = 'status-error'; // 错误状态 
+       resultElement.innerText = resultText; // 显示错误信息 
+   }
 
-    resultsDiv.appendChild(resultElement); // 将结果添加到显示区域
+   resultElement.innerText += ` (${resultText})`; 
+   resultsDiv.appendChild(resultElement); // 将结果添加到显示区域 
 }
 
 // 页面加载时显示已保存的网站列表
 window.onload = function() {
-    displayWebsiteList();
+   displayWebsiteList();
 };
