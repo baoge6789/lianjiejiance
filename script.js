@@ -42,14 +42,6 @@ function displayWebsiteList() {
         link.title = website.url; // 鼠标悬停时显示网址
         listItem.appendChild(link);
 
-        // 创建删除按钮
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = '删除';
-        deleteButton.className = 'delete';
-        deleteButton.onclick = () => {
-            deleteWebsite(index);
-        };
-
         // 创建修改按钮
         const editButton = document.createElement('button');
         editButton.textContent = '修改';
@@ -58,6 +50,15 @@ function displayWebsiteList() {
             modifyWebsite(index);
         };
 
+        // 创建删除按钮
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = '删除';
+        deleteButton.className = 'delete';
+        deleteButton.onclick = () => {
+            deleteWebsite(index);
+        };
+
+        // 将按钮添加到列表项中
         listItem.appendChild(editButton);
         listItem.appendChild(deleteButton);
         
@@ -75,23 +76,23 @@ function deleteWebsite(index) {
 
 // 修改网站
 function modifyWebsite(index) {
-    let websites = JSON.parse(localStorage.getItem('websites')) || [];
+   let websites = JSON.parse(localStorage.getItem('websites')) || [];
     
-    const newUrl = prompt("请输入新的网址", websites[index].url);
-    const newName = prompt("请输入新的网站名称", websites[index].name);
+   const newUrl = prompt("请输入新的网址", websites[index].url);
+   const newName = prompt("请输入新的网站名称", websites[index].name);
     
-    if (newUrl && newName) {
-        websites[index] = { url: newUrl, name: newName }; // 更新指定索引的网站信息
-        localStorage.setItem('websites', JSON.stringify(websites)); // 更新本地存储
-        displayWebsiteList(); // 更新显示列表
-    }
+   if (newUrl && newName) {
+       websites[index] = { url: newUrl, name: newName }; // 更新指定索引的网站信息
+       localStorage.setItem('websites', JSON.stringify(websites)); // 更新本地存储
+       displayWebsiteList(); // 更新显示列表
+   }
 }
 
 // 显示检测结果
 function displayResult(name, resultText) {
-    const resultsDiv = document.getElementById('results');
+   const resultsDiv = document.getElementById('results');
     
-    const resultElement = document.createElement('div');
+   const resultElement = document.createElement('div');
     
    if (resultText.includes("正在运行")) { 
        resultText = `网站 ${name} 正常运行，状态码: ok`; // 修改结果文本格式 
