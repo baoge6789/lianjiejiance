@@ -60,3 +60,8 @@ button.modify {
 button.default {
     background-color: green; /* 默认按钮为绿色 */
 }
+
+/* 确保按钮竖直方向上对齐 */
+#websiteList button {
+    margin-left: 10px; /* 按钮之间的间距 */
+}
