@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网站监测器</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>网址监测器</title>
+    <style>
+        .offline { color: red; }
+        .online { color: green; }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -12,17 +15,82 @@
         <form id="monitorForm">
             <input type="text" id="url" placeholder="输入网址 (例如 https://example.com)" required>
             <input type="text" id="name" placeholder="输入网站名称" required>
-            <button type="submit" class="default">添加监测</button> <!-- 添加监测按钮 -->
-            
-            </form>
-        <button id="startMonitoring" class="default">开始检测所有网站</button> <!-- 开始检测按钮 -->
-        
-       <button id="exportList" class="default">导出监测列表</button> <!-- 导出按钮 -->
-
-        
-        <div id="results"></div>
-        <ul id="websiteList"></ul> <!-- 显示监测的网站列表 -->
+            <button type="submit">添加监测</button>
+        </form>
+        <button id="startMonitoring">开始检测所有网站</button>
+        <button id="exportList">导出监测列表</button>
+        <ul id="websiteList"></ul>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        let monitoredWebsites = []; // 存储监测的网站及其状态
+
+        // 处理表单提交
+        document.getElementById('monitorForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const url = document.getElementById('url').value;
+            const name = document.getElementById('name').value;
+            addWebsite(url, name);
+            displayWebsites();
+            document.getElementById('url').value = '';
+            document.getElementById('name').value = '';
+        });
+
+        // 添加网站到监测列表
+        function addWebsite(url, name) {
+            monitoredWebsites.push({ url, name, status: '未检测' });
+        }
+
+        // 显示当前监测的网站
+        function displayWebsites() {
+            const websiteList = document.getElementById('websiteList');
+            websiteList.innerHTML = ''; // 清空现有列表
+            monitoredWebsites.forEach(website => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${website.name}: ${website.url} - 状态: ${website.status}`;
+                listItem.className = website.status === '在线' ? 'online' : 'offline';
+                websiteList.appendChild(listItem);
+            });
+        }
+
+        // 开始检测所有网站
+        document.getElementById('startMonitoring').addEventListener('click', function() {
+            monitoredWebsites.forEach(website => {
+                checkWebsite(website);
+            });
+        });
+
+        // 检查单个网站的状态
+        function checkWebsite(website) {
+            fetch(website.url, { method: 'HEAD' })
+                .then(response => {
+                    website.status = response.ok ? '在线' : '离线';
+                    displayWebsites();
+                })
+                .catch(() => {
+                    website.status = '离线';
+                    displayWebsites();
+                });
+        }
+
+        // 导出带有检测结果的列表
+        document.getElementById('exportList').addEventListener('click', function() {
+            if (monitoredWebsites.length === 0) {
+                alert("没有监测的网站可导出。");
+                return;
+            }
+
+            const dataStr = JSON.stringify(monitoredWebsites, null, 2); // 将数据转换为 JSON 字符串
+            const blob = new Blob([dataStr], { type: 'application/json' }); // 创建 Blob 对象
+            const url = URL.createObjectURL(blob); // 创建下载链接
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'monitored_websites_with_results.json'; // 设置下载文件名
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    </script>
 </body>
 </html>
