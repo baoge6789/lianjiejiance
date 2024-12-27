@@ -58,7 +58,7 @@ function displayWebsiteList() {
             deleteWebsite(index);
         };
 
-        // 将按钮添加到列表项中，确保固定在行尾
+        // 将按钮添加到列表项中
         listItem.appendChild(editButton);
         listItem.appendChild(deleteButton);
         
@@ -68,10 +68,10 @@ function displayWebsiteList() {
 
 // 删除网站
 function deleteWebsite(index) {
-   let websites = JSON.parse(localStorage.getItem('websites')) || [];
-   websites.splice(index, 1); // 删除指定索引的网站
-   localStorage.setItem('websites', JSON.stringify(websites)); // 更新本地存储
-   displayWebsiteList(); // 更新显示列表
+    let websites = JSON.parse(localStorage.getItem('websites')) || [];
+    websites.splice(index, 1); // 删除指定索引的网站
+    localStorage.setItem('websites', JSON.stringify(websites)); // 更新本地存储
+    displayWebsiteList(); // 更新显示列表
 }
 
 // 修改网站
@@ -94,15 +94,14 @@ function displayResult(name, resultText) {
     
    const resultElement = document.createElement('div');
     
-   if (resultText.includes("正在运行")) { 
-       resultText = `网站 ${name} 正常运行，状态码: 200`; // 修改结果文本格式 
+   resultElement.innerText = resultText; // 显示结果文本 
+   
+   if (resultText.includes("正常运行")) { 
        resultElement.className = 'status-normal'; 
    } else { 
        resultElement.className = 'status-error'; 
-       resultElement.innerText = resultText; 
    }
 
-   resultElement.innerText += ` (${resultText})`; 
    resultsDiv.appendChild(resultElement); 
 }
 
