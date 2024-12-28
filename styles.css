@@ -73,7 +73,7 @@ button.modify {
 }
 
 button.default {
-    background-color: green; /* 默认按钮为绿色 */
+    background-color: LawnGreen; /* 默认按钮为绿色 */
 }
 
 /* 媒体查询：针对小屏幕（如手机）进行样式调整 */
