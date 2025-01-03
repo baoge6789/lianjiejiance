@@ -35,6 +35,9 @@ button {
     padding: 10px 15px;
     margin-bottom: 10px; /* 增加按钮之间的行距 */
 }
+button.default {
+    background-color: LawnGreen; /* 默认按钮为绿色 */
+}
 
 #results {
     margin-top: 20px;
