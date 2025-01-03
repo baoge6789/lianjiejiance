@@ -31,14 +31,16 @@ input {
     padding: 10px;
 }
 
-button {
-    padding: 10px 15px;
-    margin-bottom: 10px; /* 增加按钮之间的行距 */
-}
-button.default {
-    background-color: LawnGreen; /* 默认按钮为绿色 */
-}
 
+button {
+   background-color: lightgreen; /* 所有按钮为淡绿色 */
+   color: black;
+   padding: 10px 15px;
+   margin-bottom: 10px; /* 增加按钮之间的行距 */
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+}
 #results {
     margin-top: 20px;
 }
