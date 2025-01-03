@@ -10,14 +10,15 @@
     <div class="container">
         <h1>网址即时监测器</h1>
         <form id="monitorForm">
-            <input type="text" id="url" placeholder="输入网址 (例如 https://example.com)" required>
-            <input type="text" id="name" placeholder="输入网站名称" required>
-            <button type="submit" class="default">添加监测</button> <!-- 添加监测按钮 -->
-        </form>
-        <button id="startMonitoring" class="default">开始检测所有网站</button> <!-- 开始检测按钮 -->
-        <div id="results"></div>
-        <ul id="websiteList"></ul> <!-- 显示监测的网站列表 -->
-    </div>
+            <input type="text" id="url" placeholder="输入网址" required>
+        <input type="text" id="name" placeholder="输入网站名称" required>
+        <button type="submit">添加网址</button>
+    </form>
+    <button id="toggleWebsiteList">展开列表</button> <!-- 新增按钮 -->
+    <ul id="websiteList"></ul>
+    <div id="results"></div>
+    <button id="startMonitoring">开始检测</button>
+</div>
     <script src="script.js"></script>
 </body>
 </html>
