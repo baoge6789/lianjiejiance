@@ -103,6 +103,6 @@ button.default {
     button {
         width: 100%; /* 按钮占满整个宽度 */
         margin-left: 0; /* 移除左边距以适应全宽 */
-        margin-bottom: 5px; /* 添加底部间距以分隔按钮 */
+        margin-bottom: 10px; /* 添加底部间距以分隔按钮 */
     }
 }
