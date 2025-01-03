@@ -34,6 +34,14 @@ input {
 button {
     padding: 10px 15px;
 }
+button {
+   background-color: lightgreen; /* 所有按钮为淡绿色 */
+   color: black;
+   padding: 10px 15px;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+}
 
 #results {
     margin-top: 20px;
