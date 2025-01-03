@@ -14,10 +14,12 @@
         <input type="text" id="name" placeholder="输入网站名称" required>
         <button type="submit">添加网址</button>
     </form>
-    <button id="toggleWebsiteList">展开列表</button> <!-- 新增按钮 -->
+    <button id="toggleWebsiteList">收起列表</button> <!-- 默认状态为收起 -->
     <ul id="websiteList"></ul>
     <div id="results"></div>
-    <button id="startMonitoring">开始检测</button>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <button id="startMonitoring">开始检测</button> <!-- 固定在同一行 -->
+    </div>
 </div>
     <script src="script.js"></script>
 </body>
