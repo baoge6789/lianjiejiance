@@ -6,6 +6,17 @@ document.getElementById('monitorForm').addEventListener('submit', function(event
     addWebsiteToList(url, name); // 将新网站添加到本地存储
     displayWebsiteList(); // 显示当前监测的网站列表
 });
+// 新增：处理展开/收起按钮点击事件
+document.getElementById('toggleWebsiteList').addEventListener('click', function() {
+    const websiteList = document.getElementById('websiteList');
+    if (websiteList.style.display === 'none' || websiteList.style.display === '') {
+        websiteList.style.display = 'block'; // 展开列表
+        this.textContent = '收起列表'; // 改变按钮文本
+    } else {
+        websiteList.style.display = 'none'; // 收起列表
+        this.textContent = '展开列表'; // 改变按钮文本
+    }
+});
 
 // 监听开始检测按钮点击事件
 document.getElementById('startMonitoring').addEventListener('click', async function() {
