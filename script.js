@@ -1,3 +1,4 @@
+// 监听表单提交事件
 document.getElementById('monitorForm').addEventListener('submit', function(event) {
     event.preventDefault(); // 阻止默认提交行为
     const url = document.getElementById('url').value; // 获取输入的网址
@@ -6,6 +7,7 @@ document.getElementById('monitorForm').addEventListener('submit', function(event
     displayWebsiteList(); // 显示当前监测的网站列表
 });
 
+// 监听开始检测按钮点击事件
 document.getElementById('startMonitoring').addEventListener('click', async function() {
     const websites = JSON.parse(localStorage.getItem('websites')) || [];
     
@@ -90,12 +92,15 @@ function modifyWebsite(index) {
     }
 }
 
-// 显示检测结果
+// 显示检测结果的函数
 function displayResult(name, resultText) {
     const resultsDiv = document.getElementById('results');
+    
+    if (!resultsDiv) return; // 如果没有找到 resultsDiv，直接返回
+
     const resultElement = document.createElement('div');
     
-    resultElement.innerText = resultText; // 显示结果文本
+    resultElement.innerText = `${name}: ${resultText}`; // 显示结果文本
     
     if (resultText.includes("正常运行")) {
         resultElement.className = 'status-normal';
