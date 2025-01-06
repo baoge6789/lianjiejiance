@@ -1,19 +1,20 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9e5; /* 浅黄色背景 */
+    background-color: #f0f0f0; /* 浅灰色背景，突出面板 */
     color: #333;
-    margin: 0; /* 移除默认边距 */
-    padding: 0; /* 移除默认内边距 */
+    margin: 0;
+    padding: 0;
 }
 
 .container {
     max-width: 90%; /* 容器最大宽度为90% */
     width: 600px; /* 最大宽度为600px */
-    margin: auto;
+    margin-top:100px;
+    margin: 100px auto; /* 上下留出100px的间距，居中 */
     padding: 20px;
-    background: #FFDAB9; /* 设置主面板颜色为 桃泡芙1 颜色 */
+    background: #FFDAB9; /* 面板颜色改为桃泡芙色 */
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 h1 {
@@ -31,16 +32,23 @@ input {
     padding: 10px;
 }
 
+.button-group {
+    display: flex;
+    justify-content: space-between; /* 均匀排列按钮 */
+    margin: 10px 0; /* 按钮组与其他元素的间距 */
+}
 
 button {
-   background-color: lightgreen; /* 所有按钮为淡绿色 */
-   color: black;
-   padding: 10px 15px;
-   margin-bottom: 10px; /* 增加按钮之间的行距 */
-   border: none;
-   border-radius: 5px;
-   cursor: pointer;
+    background-color: #4caf50; /* 按钮颜色为绿色 */
+    color: white; /* 按钮字体颜色为白色，确保明显 */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    flex: 1; /* 按钮自适应宽度 */
+    margin: 0 5px; /* 按钮之间的间距 */
+    text-align: center; /* 文本居中 */
 }
+
 #results {
     margin-top: 20px;
 }
@@ -50,13 +58,15 @@ button {
 }
 
 .status-error {
-    color: red; /* 错误状态显示为红色 */
+    color: black; /* 错误状态字体颜色改为黑色 */
+    background-color: red; /* 错误状态背景颜色为红色 */
+    padding: 5px; /* 增加内边距 */
+    border-radius: 5px; /* 圆角 */
 }
 
 #websiteList {
     list-style-type: none; /* 移除列表样式 */
     padding: 0; /* 移除内边距 */
-    display: none; /* 默认隐藏 */
 }
 
 #websiteList li {
@@ -67,20 +77,29 @@ button {
 }
 
 #websiteList button {
-    margin-left: 10px; /* 按钮之间的间距 */
+   margin-left: 10px; /* 按钮之间的间距 */
 }
 
-button.delete {
-    background-color: red; /* 删除按钮为红色 */
-    color: white;
+/* 进度条样式 */
+#progressContainer {
+    margin-top: 20px;
 }
 
-button.modify {
-    background-color: yellow; /* 修改按钮为黄色 */
+#progressStats {
+    text-align: center;
+    margin-bottom: 5px;
 }
 
-button.default {
-    background-color: LawnGreen; /* 默认按钮为绿色 */
+#progressBar {
+    width: 0;
+    height: 20px;
+    background-color: #4caf50; /* 进度条颜色 */
+    border-radius: 5px;
+}
+
+#progressText {
+    text-align: center;
+    margin-top: 5px;
 }
 
 /* 媒体查询：针对小屏幕（如手机）进行样式调整 */
