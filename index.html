@@ -17,11 +17,11 @@
         <div class="button-group flex justify-between mt-4">
             <button id="toggleWebsiteList" class="bg-blue-500 text-white p-2 rounded">展开列表</button>
             <button id="downloadButton" class="bg-yellow-500 text-white p-2 rounded">导出列表</button>
-            <input type="file" id="fileInput" accept=".txt" style="display: none;">
+            <input type="file" id="fileInput" accept=".json" style="display: none;">
             <button id="uploadButton" class="bg-purple-500 text-white p-2 rounded">导入列表</button>
-            <button id="clearListButton" class="bg-gray-500 text-white p-2 rounded">清空列表</button> <!-- 新增清空列表按钮 -->
+            <button id="clearListButton" class="bg-gray-500 text-white p-2 rounded">清空列表</button>
            <button id="startMonitoring" class="bg-red-500 text-white p-2 rounded">检测全部</button>
-                   </div>
+        </div>
         <ul id="websiteList" class="mt-4 hidden"></ul>
         <div id="progressContainer" style="display: none;" class="mt-4">
             <div id="progressStats" class="text-center mb-2"></div>
@@ -51,11 +51,11 @@
             const websiteList = document.getElementById('websiteList');
             websiteList.innerHTML = ''; // 清空列表
             const websites = JSON.parse(localStorage.getItem('websites')) || [];
-            
+
             websites.forEach((website, index) => {
                 const listItem = document.createElement('li');
                 listItem.className = 'flex justify-between items-center p-2 bg-white rounded shadow mb-2';
-                
+
                 const checkButton = document.createElement('button');
                 checkButton.textContent = '检测';
                 checkButton.className = 'check bg-blue-500 text-white p-2 rounded mr-2';
@@ -67,21 +67,19 @@
 
                 listItem.appendChild(checkButton); // 将检测按钮放在前面
                 listItem.appendChild(link);
-                
+
                 const editButton = document.createElement('button');
                 editButton.textContent = '修改';
                 editButton.className = 'modify bg-yellow-500 text-white p-2 rounded mr-2';
                 editButton.onclick = () => { modifyWebsite(index); };
-                
+
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = '删除';
                 deleteButton.className = 'delete bg-red-500 text-white p-2 rounded';
                 deleteButton.onclick = () => { deleteWebsite(index); };
-
-                // 将其他按钮添加到列表项中
                 listItem.appendChild(editButton);
                 listItem.appendChild(deleteButton);
-                
+
                 websiteList.appendChild(listItem);
             });
         }
@@ -99,7 +97,7 @@
             let websites = JSON.parse(localStorage.getItem('websites')) || [];
             const newUrl = prompt("请输入新的网址", websites[index].url);
             const newName = prompt("请输入新的网站名称", websites[index].name);
-            
+
             if (newUrl && newName) {
                 websites[index] = { url: newUrl, name: newName }; // 更新指定索引的网站信息
                 localStorage.setItem('websites', JSON.stringify(websites)); // 更新本地存储
@@ -115,7 +113,7 @@
             try {
                 const response = await fetch(`https://jiance.baoge.wang/?target=${encodeURIComponent(website.url)},${encodeURIComponent(website.name)}`);
                 const resultText = await response.text();
-                
+
                 displayResult(resultElement, website.name, resultText); // 显示结果时使用网站名称
 
             } catch (error) {
@@ -141,7 +139,7 @@
         // 检测全部网址的逻辑
         document.getElementById('startMonitoring').addEventListener('click', async function() {
             const websites = JSON.parse(localStorage.getItem('websites')) || [];
-            
+
             if (websites.length === 0) {
                 alert("没有可检测的网址。");
                 return;
@@ -174,7 +172,6 @@
                         failureCount++;
                         failedUrls.push(website.name); // 添加到失败网址列表
                     }
-
                 } catch (error) {
                     console.error(`检测 ${website.name} 时出错`, error);
                     failureCount++;
@@ -198,7 +195,7 @@
             }
         });
 
-        // 下载网站列表为文本文件
+        // 下载网站列表为 JSON 文件
         function downloadWebsiteList() {
             const websites = JSON.parse(localStorage.getItem('websites')) || [];
             if (websites.length === 0) {
@@ -206,19 +203,27 @@
                 return;
             }
 
-            // 创建文本内容
-            const content = websites.map(website => `${website.url},${website.name}`).join('\n');
-            const blob = new Blob([content], { type: 'text/plain' }); // 创建Blob对象
-            const url = URL.createObjectURL(blob); // 创建文件的URL
+            // Reorder properties to ensure "name" is above "url" in the JSON
+            const formattedWebsites = websites.map(website => ({
+                "name": website.name,
+                "url": website.url
+            }));
 
-            // 创建下载链接
+            // Convert the websites array to a JSON string
+            const jsonContent = JSON.stringify(formattedWebsites, null, 2); // Use null, 2 for pretty formatting
+
+            // Create a Blob with the JSON content
+            const blob = new Blob([jsonContent], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            // Create a download link
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'websites.txt'; // 设置下载文件名
-            document.body.appendChild(a); // 将链接添加到文档
-            a.click(); // 模拟点击下载
-            document.body.removeChild(a); // 下载后移除链接
-            URL.revokeObjectURL(url); // 释放URL对象
+            a.download = 'websites.json'; // File name should be .json
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         // 监听下载按钮的点击事件
@@ -231,31 +236,41 @@
 
         // 监听文件选择事件
         document.getElementById('fileInput').addEventListener('change', function(event) {
-            const file = event.target.files[0]; // 获取选择的文件
+            const file = event.target.files[0];
             if (!file) {
                 return;
             }
 
-            const reader = new FileReader(); // 创建文件读取器
+            const reader = new FileReader();
             reader.onload = function(e) {
-                const content = e.target.result; // 获取文件内容
-                const lines = content.split('\n'); // 按行分割内容
+                try {
+                    const content = e.target.result;
+                    const importedWebsites = JSON.parse(content); // Parse the JSON content
 
-                const websites = lines.map(line => {
-                    const [url, name] = line.split(','); // 分割URL和名称
-                    return { url, name }; // 返回对象
-                });
+                    // Verify that the parsed data is an array
+                    if (!Array.isArray(importedWebsites)) {
+                        throw new Error("Invalid JSON format: Expected an array.");
+                    }
 
-                // 将导入的网址添加到本地存储
-                const existingWebsites = JSON.parse(localStorage.getItem('websites')) || [];
-                const updatedWebsites = [...existingWebsites, ...websites];
-                localStorage.setItem('websites', JSON.stringify(updatedWebsites)); // 更新本地存储
+                    // Verify that each element in the array has the correct structure
+                    for (const website of importedWebsites) {
+                        if (typeof website.name !== 'string' || typeof website.url !== 'string') {
+                            throw new Error("Invalid JSON format: Each website must have a 'name' and 'url' property.");
+                        }
+                    }
 
-                alert("网址列表导入成功！");
-                displayWebsiteList(); // 更新显示列表
+                    // Add the imported websites to local storage
+                    const existingWebsites = JSON.parse(localStorage.getItem('websites')) || [];
+                    const updatedWebsites = [...existingWebsites, ...importedWebsites];
+                    localStorage.setItem('websites', JSON.stringify(updatedWebsites));
+
+                    alert("Website list imported successfully!");
+                    displayWebsiteList();
+                } catch (error) {
+                    alert("Error importing website list: " + error.message);
+                }
             };
-
-            reader.readAsText(file); // 读取文件内容
+            reader.readAsText(file);
         });
 
         // 展开/收起按钮逻辑
@@ -279,7 +294,7 @@
             // 检查是否为重复网址
             const websites = JSON.parse(localStorage.getItem('websites')) || [];
             const isDuplicate = websites.some(website => website.url === url);
-            
+
             if (isDuplicate) {
                 alert("该网址已存在，请输入不同的网址。");
                 return;
